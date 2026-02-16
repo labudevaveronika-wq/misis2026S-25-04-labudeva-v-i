@@ -81,13 +81,19 @@ int64_t& Queuea::top()
 
 int64_t Queuea::top() const
 {
-    return 0;
+    if (size_ == 0) {
+        throw std::invalid_argument("Top of an EMPTY queue");
+    }
+    return data_[startindex];
 }
 
 void Queuea::clear() noexcept
 {
+    size_ = 0;
+    startindex = 0;
 }
 
 Queuea::~Queuea() noexcept
 {
+    delete[] data_;
 }
