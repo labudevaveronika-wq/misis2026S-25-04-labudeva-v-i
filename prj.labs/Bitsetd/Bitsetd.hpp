@@ -10,22 +10,44 @@
 class BitsetD {
     public:
         BitsetD() = default;
-        BitsetD(const BitsetD&);
-        BitsetD(const std::int32_t size);
         ~BitsetD() = default;
+
+        BitsetD(const BitsetD& src);
+        BitsetD(const std::int32_t size);
         BitsetD& operator=(const BitsetD& rhs);
 
         void set(const int32_t index, const bool val);
         bool get(int32_t index) const;
-        
-        void fill(bool val);
+
+        void invert() noexcept;
+        void fill(bool val) noexcept;
+        void resize(const BitsetD& val) noexcept;
+
+        BitsetD& shift(const std::int32_t idx) noexcept;
+        BitsetD& operator<<=(const std::int32_t shift);
+        BitsetD& operator>>=(const std::int32_t shift);
+        BitsetD& operator&=(const BitsetD& rhs);
+        BitsetD& operator|=(const BitsetD& rhs);
+        BitsetD& operator^=(const BitsetD& rhs);
 
         std::int32_t size() const {
             return size_;
         };
 
-        int32_t resize();
+        bool operator==(const BitsetD& rhs) noexcept;
 
+
+        BitsetD operator~(const BitsetD& rhs) noexcept;
+
+        BitsetD operator<<(const BitsetD& lhs, const std::int32_t shift);
+  
+        BitsetD operator>>(const BitsetD& lhs, const std::int32_t shift);
+
+        BitsetD operator&(const BitsetD& lhs, const BitsetD& rhs);
+
+        BitsetD operator|(const BitsetD& lhs, const BitsetD& rhs);
+
+        BitsetD operator^(const BitsetD& lhs, const BitsetD& rhs);
 
 
     private:
