@@ -13,41 +13,48 @@ class BitsetD {
         ~BitsetD() = default;
 
         BitsetD(const BitsetD& src);
-        BitsetD(const std::int32_t size);
+        BitsetD(const std::int32_t size, const bool val);
+        BitsetD(const std::uint64_t mask, const int32_t size = 64);
         BitsetD& operator=(const BitsetD& rhs);
 
         void set(const int32_t index, const bool val);
-        bool get(int32_t index) const;
+        bool get(const int32_t index) const;
 
         void invert() noexcept;
-        void fill(bool val) noexcept;
-        void resize(const BitsetD& val) noexcept;
+        void fill(const bool val) noexcept;
+        void resize(const std::int32_t new_size, const bool val = false) noexcept;
 
         BitsetD& shift(const std::int32_t idx) noexcept;
-        BitsetD& operator<<=(const std::int32_t shift);
-        BitsetD& operator>>=(const std::int32_t shift);
+        // BitsetD& operator<<=(const std::int32_t shift);
+        // BitsetD& operator>>=(const std::int32_t shift);
         BitsetD& operator&=(const BitsetD& rhs);
         BitsetD& operator|=(const BitsetD& rhs);
         BitsetD& operator^=(const BitsetD& rhs);
 
-        std::int32_t size() const {
+        bool operator==(const BitsetD& rhs) noexcept;
+
+        std::int32_t size() const noexcept 
+        {
             return size_;
         };
 
-        bool operator==(const BitsetD& rhs) noexcept;
 
+        // BitsetD& operator~(const BitsetD& rhs) noexcept;
 
-        BitsetD operator~(const BitsetD& rhs) noexcept;
-
-        BitsetD operator<<(const BitsetD& lhs, const std::int32_t shift);
+        // BitsetD operator<<(const BitsetD& lhs, const std::int32_t shift);
   
-        BitsetD operator>>(const BitsetD& lhs, const std::int32_t shift);
+        // BitsetD operator>>(const BitsetD& lhs, const std::int32_t shift);
 
-        BitsetD operator&(const BitsetD& lhs, const BitsetD& rhs);
+        // BitsetD operator&(const BitsetD& lhs, const BitsetD& rhs);
 
-        BitsetD operator|(const BitsetD& lhs, const BitsetD& rhs);
+        // BitsetD operator|(const BitsetD& lhs, const BitsetD& rhs);
 
-        BitsetD operator^(const BitsetD& lhs, const BitsetD& rhs);
+        // BitsetD operator^(const BitsetD& lhs, const BitsetD& rhs);
+
+        // class Prox {
+        //     public:
+
+        // }
 
 
     private:
