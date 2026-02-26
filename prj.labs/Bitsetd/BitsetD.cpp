@@ -104,7 +104,7 @@ void BitsetD::invert() noexcept
     if (size_ == 0) return;
     int32_t i = size_ % 32;
     if (i == 0){
-        i == 32;
+        i = 32;
     }
     for (int32_t i = 0; i < size_ - 1; ++i) {
         databasa[i] = ~databasa[i];
@@ -159,3 +159,67 @@ bool BitsetD::operator==(const BitsetD& rhs) noexcept
     }
     return true;
 }
+
+
+BitsetD &BitsetD::shift(const std::int32_t idx) noexcept
+{
+    // TODO: insert return statement here
+}
+
+BitsetD &BitsetD::operator<<=(const std::int32_t shift)
+{
+    // TODO: insert return statement here
+}
+
+BitsetD &BitsetD::operator>>=(const std::int32_t shift)
+{
+    // TODO: insert return statement here
+}
+
+BitsetD& BitsetD::operator&=(const BitsetD& rhs)
+{
+    if (size() >= rhs.size()){
+        for (int32_t i = 0; i < databasa.size(); i++){
+            if (i >= rhs.databasa.size()){
+                databasa[i] = 0;
+            }else{
+                databasa[i] &= rhs.databasa[i];
+            }
+        }
+    }else{
+        BitsetD A(*this);
+        this->resize(rhs.size());
+        for (int32_t i = 0; i < A.databasa.size(); i++){
+            databasa[i] = A.databasa[i] & rhs.databasa[i];
+        }
+    }
+}
+
+BitsetD &BitsetD::operator|=(const BitsetD &rhs)
+{
+    if (size() >= rhs.size()){
+        for (int32_t i = 0; i < rhs.databasa.size(); i++){
+            databasa[i] |= rhs.databasa[i];
+        }
+    }else{
+        BitsetD A(*this);
+        this->resize(rhs.size());
+        // A: 1 1 1 1 1   
+        // B: 1 1 1 1 1   1
+        
+        for (int32_t i = 0; i < rhs.databasa.size(); i++){
+            if (i >= A.databasa.size()){
+                databasa[i] = rhs.databasa[i];
+            }else{
+                databasa[i] = A.databasa[i] | rhs.databasa[i];
+            }
+            
+        }
+    }
+}
+
+BitsetD &BitsetD::operator^=(const BitsetD &rhs)
+{
+    // TODO: insert return statement here
+}
+

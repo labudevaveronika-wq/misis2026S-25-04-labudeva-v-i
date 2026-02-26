@@ -25,8 +25,8 @@ class BitsetD {
         void resize(const std::int32_t new_size, const bool val = false) noexcept;
 
         BitsetD& shift(const std::int32_t idx) noexcept;
-        // BitsetD& operator<<=(const std::int32_t shift);
-        // BitsetD& operator>>=(const std::int32_t shift);
+        BitsetD& operator<<=(const std::int32_t shift);
+        BitsetD& operator>>=(const std::int32_t shift);
         BitsetD& operator&=(const BitsetD& rhs);
         BitsetD& operator|=(const BitsetD& rhs);
         BitsetD& operator^=(const BitsetD& rhs);
@@ -36,20 +36,9 @@ class BitsetD {
         std::int32_t size() const noexcept 
         {
             return size_;
-        };
+        }
 
 
-        // BitsetD& operator~(const BitsetD& rhs) noexcept;
-
-        // BitsetD operator<<(const BitsetD& lhs, const std::int32_t shift);
-  
-        // BitsetD operator>>(const BitsetD& lhs, const std::int32_t shift);
-
-        // BitsetD operator&(const BitsetD& lhs, const BitsetD& rhs);
-
-        // BitsetD operator|(const BitsetD& lhs, const BitsetD& rhs);
-
-        // BitsetD operator^(const BitsetD& lhs, const BitsetD& rhs);
 
         // class Prox {
         //     public:
@@ -58,8 +47,21 @@ class BitsetD {
 
 
     private:
+
         std::int32_t size_ = 0;
-        std::vector<std::uint32_t> databasa;
+        std::vector<std::uint32_t>
+
+        BitsetD& operator~(const BitsetD& rhs) noexcept;
+
+        BitsetD operator<<(const BitsetD& lhs, const std::int32_t shift);
+  
+        BitsetD operator>>(const BitsetD& lhs, const std::int32_t shift);
+
+        BitsetD operator&(const BitsetD& lhs, const BitsetD& rhs);
+
+        BitsetD operator|(const BitsetD& lhs, const BitsetD& rhs);
+
+        BitsetD operator^(const BitsetD& lhs, const BitsetD& rhs);
 
 
 };
