@@ -14,14 +14,15 @@ BitsetD::BitsetD(const std::int32_t size, const bool val)
 
     int32_t word = size / 32 + bool(size % 32);
     databasa.resize(word);
+    size_ = size;
     if (val){
         for (uint64_t i = 0; i < word - 1; i++){
-            databasa[i] = (1<<32) - 1;
+            databasa[i] = (1ULL<<32) - 1;
         }
         if (size%32 == 0){
-            databasa[word - 1] = (1<<32) - 1;
+            databasa[word - 1] = (1ULL<<32) - 1;
         }else{
-            databasa[word - 1] = (1<<(size%32)) - 1;
+            databasa[word - 1] = (1ULL<<(size%32)) - 1;
         }
     }else{
         for (uint64_t i = 0; i < word; i++){
@@ -32,6 +33,7 @@ BitsetD::BitsetD(const std::int32_t size, const bool val)
 
 
 }
+
 BitsetD &BitsetD::operator=(const BitsetD& rhs)
 {
     if (this != &rhs){
@@ -43,22 +45,23 @@ BitsetD &BitsetD::operator=(const BitsetD& rhs)
 
 BitsetD::BitsetD(const std::uint64_t mask, const int32_t size)
 {
-    // TODOOOOOO
+    // TODOOOOO
     if (size <= 0){
         throw std::invalid_argument("BitsetD constructor: size cannot be negative");
     }
     int32_t word = size / 32 + bool(size % 32);
+    size_ = size;
     databasa.resize(word);
     if (size < 64){
         if (size <= 32){
-            databasa[0] = mask & ((1<<size) - 1);
+            databasa[0] = mask & ((1ULL<<size) - 1);
         }else{
-            databasa[0] = mask & ((1<<32) - 1);
-            databasa[1] = mask & (((1<<(size + 32)) - 1) - ((1<<32) - 1));
+            databasa[0] = mask & ((1ULL<<32) - 1);
+            databasa[1] = mask & (((1ULL<<(size + 32)) - 1) - ((1ULL<<32) - 1));
         }
     }else{
-        databasa[0] = mask & ((1<<32) - 1);
-        databasa[1] = mask & (((1<<64) - 1) - ((1<<32) - 1));
+        databasa[0] = mask & ((1ULL<<32) - 1);
+        databasa[1] = mask & (((0xFFFFFFFFFFFFFFFF) - 1) - ((1ULL<<32) - 1));
         for (uint64_t i = 2; i < word; i++){
             databasa[i] = 0;
         }
@@ -70,17 +73,13 @@ void BitsetD::set(const int32_t index, bool val)
     if (index < 0 || index >= size_) {
         throw std::invalid_argument("BitsetD::get: index out of range");
     }
-    int32_t word = index / 32 + bool(index % 32);
+    int32_t word = index / 32 + int(bool(index % 32));
+    word--;
     int32_t i = index % 32;
-    i--;
-    if (i == -1){
-        i = 31;
-    }
-
     if (val){
-        databasa[word - 1] = databasa[word - 1] | (1 << i);
+        databasa[word] = databasa[word] | (1ULL<<i);
     }else{
-        databasa[word - 1] = databasa[word - 1] & (~(1<<i));
+        databasa[word] = databasa[word] & (~(1ULL<<i));
     }
 }
 
@@ -91,11 +90,7 @@ bool BitsetD::get(int32_t index) const
     }
     int32_t wordindex = index / 32;
     int32_t indexposition = index % 32;
-    indexposition--;
-    if (indexposition == -1){
-        indexposition = 31;
-    }
-    int32_t mask = 1 << indexposition;
+    int32_t mask = 1ULL<<indexposition;
     return (databasa[wordindex] & mask) != 0;
 }
 
@@ -109,10 +104,10 @@ void BitsetD::invert() noexcept
     for (int32_t i = 0; i < size_ - 1; ++i) {
         databasa[i] = ~databasa[i];
     }
-    databasa[size_ - 1] = (~databasa[size_ - 1]) & ((1<<i) - 1);
+    databasa[size_ - 1] = (~databasa[size_ - 1]) & ((1ULL<<i) - 1);
 }
 
-void BitsetD::fill(bool val)
+void BitsetD::fill(const bool val) noexcept 
 {
     if (size_ == 0) {
         throw std::invalid_argument("BitsetD::resize - non positive size");
@@ -122,12 +117,12 @@ void BitsetD::fill(bool val)
     databasa.resize(word);
     if (val){
         for (uint64_t i = 0; i < word - 1; i++){
-            databasa[i] = (1<<32) - 1;
+            databasa[i] = (1ULL<<32) - 1;
         }
         if (size_%32 == 0){
-            databasa[word - 1] = (1<<32) - 1;
+            databasa[word - 1] = (1ULL<<32) - 1;
         }else{
-            databasa[word - 1] = (1<<(size_%32)) - 1;
+            databasa[word - 1] = (1ULL<<(size_%32)) - 1;
         }
     }else{
         for (uint64_t i = 0; i < word; i++){
@@ -136,7 +131,7 @@ void BitsetD::fill(bool val)
     }
 }
 
-void BitsetD::resize(const std::int32_t new_size, const bool val = false) noexcept
+void BitsetD::resize(const std::int32_t new_size, bool val) noexcept
 {
     if (new_size >= 0){
         throw std::invalid_argument("BitsetD constructor: size cannot be negative");
@@ -160,20 +155,66 @@ bool BitsetD::operator==(const BitsetD& rhs) noexcept
     return true;
 }
 
-
-BitsetD &BitsetD::shift(const std::int32_t idx) noexcept
+BitsetD& BitsetD::shift(const std::int32_t idx) noexcept
 {
-    // TODO: insert return statement here
+    int32_t k = idx;
+    k = k % size();
+    if (k == 0){
+        return *this;
+    }
+
+
+    BitsetD bitset(size(), false);
+
+    for (int32_t i = 0; i < size_; ++i) {
+        int32_t old_p = i;
+        int32_t new_p = (i+k)%size();
+
+        if (new_p < 0) {
+            new_p += size();
+        }
+
+        if (get(old_p)) {
+            bitset.set(new_p, true);
+        }
+    }
+
+    *this = bitset;
+    return *this;
+    
 }
 
-BitsetD &BitsetD::operator<<=(const std::int32_t shift)
-{
-    // TODO: insert return statement here
+BitsetD& BitsetD::operator<<=(const std::int32_t shift)
+{ 
+    if (shift == 0) {
+        return *this;
+    }
+
+    BitsetD bitset(size(), false);
+
+    for (int32_t i = 0; i < size_ - shift; i++) {
+        if (get(i) == true) {
+            bitset.set(i + shift, true);
+        }
+    }
+    *this = bitset;
+    return *this; 
 }
 
-BitsetD &BitsetD::operator>>=(const std::int32_t shift)
+BitsetD& BitsetD::operator>>=(const std::int32_t shift)
 {
-    // TODO: insert return statement here
+    if (shift == 0) {
+        return *this;
+    }
+    BitsetD bitset(size(), false);
+
+    for (int32_t i = size_ - 1; i - shift >= 0; --i) {
+        if (get(i) == true) {
+            bitset.set(i - shift, true);
+        }
+    }
+    *this = bitset;
+    return *this; 
 }
 
 BitsetD& BitsetD::operator&=(const BitsetD& rhs)
@@ -193,6 +234,7 @@ BitsetD& BitsetD::operator&=(const BitsetD& rhs)
             databasa[i] = A.databasa[i] & rhs.databasa[i];
         }
     }
+    return *this;
 }
 
 BitsetD &BitsetD::operator|=(const BitsetD &rhs)
@@ -216,10 +258,120 @@ BitsetD &BitsetD::operator|=(const BitsetD &rhs)
             
         }
     }
+    return *this;
 }
 
 BitsetD &BitsetD::operator^=(const BitsetD &rhs)
 {
-    // TODO: insert return statement here
+    if (size() >= rhs.size()){
+        for (int32_t i = 0; i < rhs.databasa.size(); i++){
+            databasa[i] ^= rhs.databasa[i];
+        }
+    }else{
+        BitsetD A(*this);
+        this->resize(rhs.size());
+        for (int32_t i = 0; i < rhs.databasa.size(); i++){
+            databasa[i] = A.databasa[i] ^ rhs.databasa[i];
+        }
+    }
+    return *this;
 }
 
+BitsetD operator<<(const BitsetD &lhs, const std::int32_t shift)
+{
+    BitsetD A(lhs);
+    if (shift == 0){
+        return A;
+    }
+    A.resize(lhs.size());
+    for (int32_t i = 0; i < A.size() - shift; i++) {
+        if (lhs.get(i) == true) {
+            A.set(i + shift, true);
+        }
+    }
+
+    return A; 
+}
+
+BitsetD operator>>(const BitsetD &lhs, const std::int32_t shift)
+{
+    BitsetD A(lhs);
+    if (shift == 0){
+        return A;
+    }
+    A.resize(lhs.size());
+    for (int32_t i = A.size() - 1; i - shift >= 0; --i) {
+        if (lhs.get(i) == true) {
+            A.set(i - shift, true);
+        }
+    }
+
+    return A;
+}
+
+BitsetD operator&(const BitsetD &lhs, const BitsetD &rhs)
+{
+    BitsetD A; 
+    if (lhs.size() >= rhs.size()){
+        A.resize(lhs.size());
+        for (int32_t i = 0; i < rhs.size(); i++){
+            A.set(i, lhs.get(i) & rhs.get(i));
+        }
+    }else{
+        A.resize(rhs.size());
+        for (int32_t i = 0; i < lhs.size(); i++){
+            A.set(i, lhs.get(i) & rhs.get(i));
+        }
+    }
+    return A;   
+}
+
+BitsetD operator|(const BitsetD &lhs, const BitsetD &rhs)
+{
+    BitsetD A; 
+    if (lhs.size() >= rhs.size()){
+        A.resize(lhs.size());
+        for (int32_t i = 0; i < lhs.size(); i++){
+            if (i >= rhs.size()){  
+                A.set(i, lhs.get(i) | 0);
+            }else{
+                A.set(i, lhs.get(i) | rhs.get(i));
+            }
+        }
+    }else{
+        A.resize(rhs.size());
+        for (int32_t i = 0; i < rhs.size(); i++){
+            if (i >= lhs.size()){  
+                A.set(i, rhs.get(i) | 0);
+            }else{
+                A.set(i, lhs.get(i) | rhs.get(i));
+            }
+        }
+    }
+    return A;   
+}
+
+BitsetD operator^(const BitsetD &lhs, const BitsetD &rhs)
+{
+    BitsetD A; 
+    if (lhs.size() >= rhs.size()){
+        A.resize(lhs.size());
+        for (int32_t i = 0; i < lhs.size(); i++){
+            if (i >= rhs.size()){  
+                A.set(i, lhs.get(i));
+            }else{
+                A.set(i, lhs.get(i) ^ rhs.get(i));
+            }
+        }
+    }else{
+        A.resize(rhs.size());
+        for (int32_t i = 0; i < rhs.size(); i++){
+            if (i >= lhs.size()){  
+                A.set(i, rhs.get(i));
+            }else{
+                A.set(i, lhs.get(i) ^ rhs.get(i));
+            }
+        }
+    }
+    return A; 
+}
