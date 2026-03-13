@@ -5,7 +5,6 @@
 BitsetD::BitsetD(const BitsetD& src) {
     size_ = src.size_;
     databasa = src.databasa;
-    std::cout << "BitsetD copy constructor called, size=" << size_ << std::endl;
 
 }
 
@@ -314,4 +313,23 @@ BitsetD operator^(const BitsetD &lhs, const BitsetD &rhs)
     BitsetD result(lhs);
     result ^= rhs;
     return result;
+}
+
+
+BitsetD::BitsetD(BitsetD&& src) noexcept
+{
+    size_ = src.size_;
+    databasa = std::move(src.databasa);
+    src.size_ = 0;
+}
+
+
+BitsetD& BitsetD::operator=(BitsetD&& rhs) noexcept
+{
+    if (this != &rhs) {
+        size_ = rhs.size_;
+        databasa = std::move(rhs.databasa);
+        rhs.size_ = 0;
+    }
+    return *this;
 }
