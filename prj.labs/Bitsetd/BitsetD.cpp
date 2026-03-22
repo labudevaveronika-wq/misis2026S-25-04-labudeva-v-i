@@ -5,7 +5,7 @@
 BitsetD::BitsetD(const BitsetD& src) {
     size_ = src.size_;
     databasa = src.databasa;
-
+   
 }
 
 BitsetD::BitsetD(const std::int32_t size, const bool val)
