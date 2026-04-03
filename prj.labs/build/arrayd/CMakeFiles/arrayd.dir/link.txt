@@ -1,0 +1,2 @@
+C:\Users\vil\scoop\apps\mingw\current\bin\ar.exe qc libarrayd.a CMakeFiles/arrayd.dir/arrayd.cpp.obj
+C:\Users\vil\scoop\apps\mingw\current\bin\ranlib.exe libarrayd.a

@@ -1,4 +1,4 @@
-#include <arrayd/arrayd.hpp>
+#include "arrayd.hpp"
 
 #include <cstring>
 #include <stdexcept>

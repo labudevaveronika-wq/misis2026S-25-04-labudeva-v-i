@@ -1,0 +1,13 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/complex/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/rational/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/arrayd/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/stacka/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/stackl/cmake_install.cmake",
+		"C:/Users/vil/Desktop/misis2026-25-4/misis2026s-25-04-labudeva-v-i/prj.labs/build/BitsetD/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

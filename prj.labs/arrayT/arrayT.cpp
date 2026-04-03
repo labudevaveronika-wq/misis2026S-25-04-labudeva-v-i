@@ -2,6 +2,12 @@
 #include <algorithm>
 #include <string>
 
+
+template<typename T, typename S>
+ArrayT<T, S>::ArrayT()
+    : capacity_(0), size_(0), data_(nullptr) {}
+
+    
 template<typename T, typename S>
 ArrayT<T, S>::ArrayT(const ArrayT& src) 
     : capacity_(src.size_)

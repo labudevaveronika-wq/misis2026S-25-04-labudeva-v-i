@@ -1,0 +1,2 @@
+C:\Users\vil\scoop\apps\mingw\current\bin\ar.exe qc libbitsetd_lab.a CMakeFiles/bitsetd_lab.dir/BitsetD.cpp.obj
+C:\Users\vil\scoop\apps\mingw\current\bin\ranlib.exe libbitsetd_lab.a
