@@ -61,7 +61,7 @@ class BitsetD {
         class BitR {
             friend class BitsetD;
         public:
-                ~BitR() = default;
+            ~BitR() = default;
             operator bool() const noexcept { return val_; }
         private:
             BitR(const BitsetD& bs, const int32_t idx) : val_(bs.get(idx)) {}
