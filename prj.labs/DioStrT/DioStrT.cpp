@@ -8,11 +8,11 @@ std::ostream& DioStrT::writeti(std::ostream& out) const {
     out << "\""; // Начальная кавычка
     for (size_t i = 0; i < str_string.length(); ++i) {
         char c = str_string[i];
-        if (c == '\n') out << "\\n";      // Экранируем перенос
-        else if (c == '\\') out << "\\\\"; // Экранируем сам слэш
+        if (c == '\n') out << "\\n";      
+        else if (c == '\\') out << "\\\\"; 
         else out << c;
     }
-    out << "\""; // Конечная кавычка
+    out << "\""; 
     return out;
 }
 
@@ -20,7 +20,7 @@ std::istream& DioStrT::readfrom(std::istream& in) {
     char ch;
     str_string = "";
     
-    // Пропускаем всё до первой кавычки
+    
     while (in.get(ch) && ch != '\"');
 
     // Читаем содержимое
