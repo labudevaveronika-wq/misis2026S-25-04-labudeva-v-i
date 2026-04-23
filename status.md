@@ -1,4 +1,5 @@
-STAMP: 20260416-122104
+STAMP: 20260423-131923
+ERROR: file prj.labs/CMakeLists.txt is absent
 ERROR: file prj.labs/arrayt/CMakeLists.txt is absent
 ERROR: file prj.labs/dio/CMakeLists.txt is absent
 ERROR: file prj.labs/dio/dio.hpp is absent
