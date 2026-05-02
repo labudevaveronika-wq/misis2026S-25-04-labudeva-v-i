@@ -40,6 +40,7 @@ Queuea &Queuea::operator=(const Queuea& src)
     for (int64_t t = 0; t < src.size_; t++) {
         data_[t] = src.data_[src.startindex + t];
     }
+    return *this;
 }
 
 bool Queuea::is_empty() const noexcept

@@ -4,7 +4,7 @@
 #include <sstream>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "../prj.labs/prj.thirdparty/doctest/doctest.h"
+#include "doctest/doctest.h"
 #include <limits>
 
 // TEST_CASE("Constructor tests") {
@@ -527,36 +527,36 @@
 
 
 
-// TEST_CASE("Прокси классы: детальная проверка") {
-//     BitsetD A(10, true);  // 1111111111
-//     BitsetD B(10, false); // 0000000000
+TEST_CASE("Прокси классы: детальная проверка") {
+    BitsetD A(10, true);  // 1111111111
+    BitsetD B(10, false); // 0000000000
 
-//     SUBCASE("Чтение и запись") {
-//         A[0] = false;
-//         CHECK(A[0] == false);
-//         A[0] = true;
-//         CHECK(A[0] == true);
-//     }
+    SUBCASE("Чтение и запись") {
+        A[0] = false;
+        CHECK(A[0] == false);
+        A[0] = true;
+        CHECK(A[0] == true);
+    }
 
-//     SUBCASE("Сравнение разных объектов через прокси") {
-//         A[0] = false;
-//         CHECK(A[0] == B[0]); 
-//         CHECK(A[1] != B[1]); 
-//     }
+    SUBCASE("Сравнение разных объектов через прокси") {
+        A[0] = false;
+        CHECK(A[0] == B[0]); 
+        CHECK(A[1] != B[1]); 
+    }
 
-//     SUBCASE("Присваивание прокси прокси (BitW = BitR)") {
-//         A[5] = false;
-//         B[5] = A[5]; 
-//         CHECK(B[5] == false);
+    SUBCASE("Присваивание прокси прокси (BitW = BitR)") {
+        A[5] = false;
+        B[5] = A[5]; 
+        CHECK(B[5] == false);
         
-//         A[2] = true;
-//         B[2] = A[2];
-//         CHECK(B[2] == true);
-//     }
+        A[2] = true;
+        B[2] = A[2];
+        CHECK(B[2] == true);
+    }
 
-//     SUBCASE("Работа в константном контексте (BitR)") {
-//         const BitsetD& const_A = A;
-//         bool val = const_A[0]; 
-//         CHECK(val == true);
-//     }
-// }
+    SUBCASE("Работа в константном контексте (BitR)") {
+        const BitsetD& const_A = A;
+        bool val = const_A[0]; 
+        CHECK(val == true);
+    }
+}
