@@ -1,11 +1,30 @@
 #include "BitsetD.hpp"
 #include <stdexcept>
 #include <cassert>
+#include <algorithm>
 
 BitsetD::BitsetD(const BitsetD& src) {
     size_ = src.size();
     bits_ = src.bits_;
    
+}
+
+
+BitsetD::BitsetD(BitsetD&& src) noexcept
+{
+    size_ = src.size_;
+    bits_ = std::move(src.bits_);
+    src.size_ = 0;
+}
+
+BitsetD& BitsetD::operator=(BitsetD&& rhs) noexcept
+{
+    if (this != &rhs) {
+        size_ = rhs.size_;
+        bits_ = std::move(rhs.bits_);
+        rhs.size_ = 0;
+    }
+    return *this;
 }
 
 BitsetD::BitsetD(const std::int32_t size, const bool val)
@@ -42,10 +61,6 @@ BitsetD::BitsetD(const std::uint64_t mask, const int32_t size)
     int32_t word_count = (size + 31)/32;
     bits_.resize(word_count, 0u);
 
-    // int32_t word = size / 32 + bool(size % 32);
-    // size_ = size;
-    // databasa.resize(word);
-
     if (word_count > 0) {
         bits_[0] = static_cast<std::uint32_t>(mask & 0xFFFFFFFF);
     }
@@ -65,7 +80,6 @@ void BitsetD::set(const int32_t index, bool val)
     if (index < 0 || index >= size_) {
         throw std::out_of_range("BitsetD::set: index out of range");
     }
-
 
     int32_t word = index / 32;
     int32_t bit = index % 32;
@@ -148,14 +162,11 @@ void BitsetD::resize(const std::int32_t new_size, bool val)
 
 bool BitsetD::operator==(const BitsetD& rhs) const noexcept
 {
-    assert(databasa.size() == rhs.databasa.size() && 
-           "BitsetD::operator==: vector sizes mismatch");
-
     if (size() != rhs.size_) {
         return false;
     } else {
-        for (int32_t i = 0; i < databasa.size(); i++) {
-            if (databasa[i] != rhs.bits_[i]) {
+        for (int32_t i = 0; i < bits_.size(); i++) {
+            if (bits_[i] != rhs.bits_[i]) {
                 return false;
             }
         }
@@ -433,20 +444,3 @@ BitsetD operator^(const BitsetD &lhs, const BitsetD &rhs)
 }
 
 
-BitsetD::BitsetD(BitsetD&& src) noexcept
-{
-    size_ = src.size_;
-    bits_ = std::move(src.bits_);
-    src.size_ = 0;
-}
-
-
-BitsetD& BitsetD::operator=(BitsetD&& rhs) noexcept
-{
-    if (this != &rhs) {
-        size_ = rhs.size_;
-        bits_ = std::move(rhs.bits_);
-        rhs.size_ = 0;
-    }
-    return *this;
-}
