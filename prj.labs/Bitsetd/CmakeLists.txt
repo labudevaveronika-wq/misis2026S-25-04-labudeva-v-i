@@ -1,12 +1,1 @@
-add_library(bitsetd_lab STATIC BitsetD.cpp Bitsetd.hpp)
-target_include_directories(bitsetd_lab PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Указываем правильный путь к файлу в соседней папке prj.test
-add_executable(bitset_test ../../prj.test/BitsetD_test.cpp)
-
-# Добавляем пути для поиска заголовков (чтобы видел и твою либу, и doctest)
-target_include_directories(bitset_test PRIVATE ..)
-target_include_directories(bitset_test PRIVATE ../prj.thirdparty)
-
-# Линкуем тест с библиотекой
-target_link_libraries(bitset_test bitsetd_lab)
+add_library(bitsetd bitsetd.cpp bitsetd.hpp)

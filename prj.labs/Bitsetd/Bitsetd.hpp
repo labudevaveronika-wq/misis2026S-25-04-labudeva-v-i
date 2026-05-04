@@ -23,12 +23,12 @@ class BitsetD {
         BitsetD& operator=(const BitsetD& rhs);
         BitsetD& operator=(BitsetD&& rhs) noexcept;
 
-        void set(const int32_t index, const bool val);
-        bool get(const int32_t index) const;
+        void set(const int32_t index, const bool val = true);
+        [[nodiscard]] bool get(const int32_t index) const;
 
-        void invert() noexcept;
+        BitsetD& invert() noexcept;
         void fill(const bool val) noexcept;
-        void resize(const std::int32_t new_size, bool val = false) noexcept;
+        void resize(const std::int32_t new_size, bool val = false); 
 
         BitsetD& shift(const std::int32_t idx) noexcept;
         BitsetD& operator<<=(const std::int32_t shift);
@@ -42,6 +42,9 @@ class BitsetD {
         explicit operator std::uint64_t() const;
         explicit operator std::uint32_t() const;
 
+        std::ostream& write_to(std::ostream& strm) const;
+        std::istream& read_from(std::istream& strm);
+
         enum class StrFormat : int32_t {
             Bin = 1,     
             BinNoPreSep,  
@@ -53,10 +56,7 @@ class BitsetD {
 
         std::string to_string(const StrFormat fmt = StrFormat::Def, const int32_t len = 0) const;
 
-        std::int32_t size() const noexcept 
-        {
-            return size_;
-        }
+        [[nodiscard]] std::int32_t size() const noexcept;
 
         class BitR {
             friend class BitsetD;
@@ -90,7 +90,7 @@ class BitsetD {
     private:
 
         std::int32_t size_ = 0;
-        std::vector<std::uint32_t> databasa;
+        std::vector<std::uint32_t> bits_{};
 };
 
 
