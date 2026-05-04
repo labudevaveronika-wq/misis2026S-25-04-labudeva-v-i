@@ -42,15 +42,6 @@ BitsetD::BitsetD(const std::int32_t size, const bool val)
     }
 }
 
-BitsetD &BitsetD::operator=(const BitsetD& rhs)
-{
-    if (this != &rhs){
-        size_ = rhs.size_;
-        bits_ = rhs.bits_;
-    }
-    return *this;
-}
-
 BitsetD::BitsetD(const std::uint64_t mask, const int32_t size)
 {
     // TODOOOOO
