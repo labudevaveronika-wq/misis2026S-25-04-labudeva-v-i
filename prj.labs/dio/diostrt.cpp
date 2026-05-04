@@ -1,10 +1,10 @@
 #include "dio.hpp"
 
-void DioStrT::save(const std::string& str) {
+void DioStrt::save(const std::string& str) {
     str_string = str;
 }
 
-std::ostream& DioStrT::writeti(std::ostream& out) const {
+std::ostream& DioStrt::writeti(std::ostream& out) const {
     out << "\""; // Начальная кавычка
     for (size_t i = 0; i < str_string.length(); ++i) {
         char c = str_string[i];
@@ -16,16 +16,15 @@ std::ostream& DioStrT::writeti(std::ostream& out) const {
     return out;
 }
 
-std::istream& DioStrT::readfrom(std::istream& in) {
+std::istream& DioStrt::readfrom(std::istream& in) {
     char ch;
     str_string = "";
     
     
     while (in.get(ch) && ch != '\"');
 
-    // Читаем содержимое
     while (in.get(ch) && ch != '\"') {
-        if (ch == '\\') { // Если встретили слэш, смотрим на следующий символ
+        if (ch == '\\') {
             char next;
             if (in.get(next)) {
                 if (next == 'n') str_string += '\n';
@@ -39,4 +38,4 @@ std::istream& DioStrT::readfrom(std::istream& in) {
     return in;
 }
 
-const std::string& DioStrT::val() const { return str_string; }
+const std::string& DioStrt::val() const { return str_string; }
