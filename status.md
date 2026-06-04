@@ -1,4 +1,4 @@
-STAMP: 20260528-095345
+STAMP: 20260604-084235
 ERROR: file prj.labs/jaggeda/jaggeda.hpp is absent
 ERROR: file prj.test/bitsetd_profiler.cpp is absent
 ERROR: file prj.test/jaggeda_test.cpp is absent
